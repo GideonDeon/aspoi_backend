@@ -17,22 +17,32 @@ export async function GET(req) {
 
     const paymentData = response.data.data;
 
-    // Save user record in DB
-    await prisma.user.create({
-      data: {
-        fullname: paymentData.metadata.fullname,
+    // Save or update user record in DB
+    await prisma.user.upsert({
+      where: { email: paymentData.customer.email },
+      update: {
+        fullname: paymentData.metadata?.fullname,
+        phone: paymentData.metadata?.phone,
+        membership: paymentData.metadata?.membership,
+        amount: paymentData.amount / 100,
+        imageUrl: paymentData.metadata?.imageUrl, // <-- store uploaded image
+        paymentStatus: paymentData.status
+      },
+      create: {
+        fullname: paymentData.metadata?.fullname,
         email: paymentData.customer.email,
-        phone: paymentData.metadata.phone,
-        membership: paymentData.metadata.membership,
-        amount: paymentData.amount / 100, // convert from kobo
-        paymentStatus: paymentData.status,
+        phone: paymentData.metadata?.phone,
+        membership: paymentData.metadata?.membership,
+        amount: paymentData.amount / 100,
+        imageUrl: paymentData.metadata?.imageUrl, // <-- store uploaded image
+        paymentStatus: paymentData.status
       },
     });
 
     return new Response(JSON.stringify(response.data), {
       status: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*", // allow all origins
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
@@ -41,12 +51,7 @@ export async function GET(req) {
     console.error(error.response?.data || error.message);
     return new Response(
       JSON.stringify({ error: "Payment verification failed" }),
-      {
-        status: 500,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
+      { status: 500 }
     );
   }
 }

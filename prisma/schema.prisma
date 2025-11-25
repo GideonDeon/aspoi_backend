@@ -15,6 +15,7 @@ datasource db {
 
 model User {
   id            Int      @id @default(autoincrement())
+  imageUrl      String?   // <-- store uploaded image path
   fullname      String
   email         String   @unique
   phone         String

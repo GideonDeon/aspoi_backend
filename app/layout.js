@@ -1,3 +1,5 @@
+import "./global.css";
+
 export const metadata = {
   title: "Aspoi Membership",
   description: "Next.js + Prisma + Paystack integration",
@@ -7,35 +9,26 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {/* Global Header */}
-        <header style={{ 
-          backgroundColor: "#0d6efd", 
-          color: "white", 
-          padding: "1rem", 
-          textAlign: "center" 
-        }}>
-          <h1>Aspoi Membership Portal</h1>
-          <nav>
-            <a href="/" style={{ margin: "0 1rem", color: "white" }}>Home</a>
-            <a href="/register" style={{ margin: "0 1rem", color: "white" }}>Register</a>
-            <a href="/confirmation" style={{ margin: "0 1rem", color: "white" }}>Confirmation</a>
-          </nav>
+        <header className="bg-black text-white min-h-50">
+          <div className="flex flex-col justify-center">
+            <h1 className="text-center text-3xl mt-4 mb-2 font-roboto">
+              ASPOI Membership
+            </h1>
+            <img
+              src="/images/aspoi-logo.png"
+              alt="logo"
+              className="w-20 h-20 relative left-[50%] -translate-x-[50%]"
+            />
+            <nav className="text-center mt-7 font-aldrich hover:text-[#feff00] w-fit relative left-[50%] -translate-x-[50%]">
+              <a href="/">Home</a>
+            </nav>
+          </div>
         </header>
 
-        {/* Page Content */}
-        <main style={{ minHeight: "80vh", padding: "2rem" }}>
-          {children}
-        </main>
-
-        {/* Global Footer */}
-        <footer style={{ 
-          backgroundColor: "#f8f9fa", 
-          padding: "1rem", 
-          textAlign: "center", 
-          borderTop: "1px solid #ddd" 
-        }}>
-          <p>© {new Date().getFullYear()} Aspoi. All rights reserved.</p>
-        </footer>
+        <main>{children}</main>
+        <p className="text-center absolute -bottom-7 w-full">
+          ©  Aspoi {new Date().getFullYear()}
+        </p>
       </body>
     </html>
   );

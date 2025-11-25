@@ -1,0 +1,15 @@
+@font-face {
+  font-family: Aldrich;
+  src: url("/fonts/Aldrich-Regular.ttf");
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/fonts/Roboto-Light.ttf");
+}
+@theme {
+  --font-aldrich: Aldrich, "sanserif";
+  --font-roboto: Roboto, "sanserif";
+}
+
+@import "tailwindcss";
