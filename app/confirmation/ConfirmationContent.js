@@ -27,48 +27,51 @@ export default function ConfirmationContent() {
   }, [reference]);
 
   if (error) return <p style={{ color: "red" }}>❌ {error}</p>;
-  if (!paymentData) return <p>Verifying payment...</p>;
+  if (!paymentData) return <p className="mt-5 ml-5 ">Verifying payment...</p>;
 
   const status = paymentData.status;
 
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
 
-    // Add title
+    try {
+      doc.addImage("/images/aspoi-logo.png", "PNG", 20, 10, 20, 20);
+    } catch {
+    //   "Logo not found, skipping..."
+    }
+
+
     doc.setFontSize(20);
     doc.setFont("helvetica", "bold");
-    doc.text("Membership Payment Receipt", 105, 20, { align: "center" });
+    doc.text("Membership Payment Receipt", 105, 25, { align: "center" });
 
-    // Add a line
     doc.setLineWidth(0.5);
-    doc.line(20, 25, 190, 25);
+    doc.line(20, 35, 190, 35);
 
-    // Add content
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
     
-    doc.text(`Reference: ${reference}`, 20, 40);
     doc.text(`Fullname: ${paymentData.metadata?.fullname || "N/A"}`, 20, 50);
     doc.text(`Email: ${paymentData.customer?.email || "N/A"}`, 20, 60);
     doc.text(`Phone: ${paymentData.metadata?.phone || "N/A"}`, 20, 70);
     doc.text(`Membership: ${paymentData.metadata?.membership || "N/A"}`, 20, 80);
-    doc.text(`Amount Paid: ₦${(paymentData.amount / 100).toLocaleString()}`, 20, 90);
+    doc.text(`Amount Paid: ${(paymentData.amount / 100).toLocaleString()}`, 20, 90);
     doc.text(`Payment Status: ${paymentData.status}`, 20, 100);
     doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 110);
+    doc.text(`Reference: ${reference}`, 20, 120);
 
-    // Add footer
     doc.setFontSize(10);
     doc.setTextColor(128);
-    doc.text("Thank you for your membership!", 105, 130, { align: "center" });
+    doc.text("Thank you for your membership!", 105, 140, { align: "center" });
 
-    doc.save(`receipt_${reference}.pdf`);
+    doc.save(`receipt_${paymentData.metadata?.fullname || reference}.pdf`);
   };
 
   if (status === "success") {
     return (
       <div className="pl-1 pr-1 h-fit w-full mb-10 shadow-2xl sm:w-120 
                   sm:relative sm:left-[50%] sm:-translate-x-[50%] lg:w-140 font-roboto">
-        <h1 className="italic text-center font-roboto mt-2 mb-3">
+        <h1 className="italic text-center font-roboto mt-2 mb-3 pl-1 pr-1">
           Thank you for completing your membership registration. We’re excited
           to have you with us!
         </h1>
@@ -80,12 +83,12 @@ export default function ConfirmationContent() {
             height={100}
             className="w-30 h-30 border-2 border-black rounded-[15px]"
           />
-          <div className="pt-8">
-            <p>Fullname: {paymentData.metadata?.fullname}</p>
+          <div className="pt-8 text-[15px]">
+            <p className="mb-2">Fullname: {paymentData.metadata?.fullname}</p>
             <p>Membership: {paymentData.metadata?.membership}</p>
           </div>
         </div>
-        <div className="grid grid-cols-[1fr_1fr] w-full gap-1 sm:grid-cols-[2fr_1fr] pl-5">
+        <div className="grid grid-cols-[1fr_1fr] w-full text-[15px] gap-1 sm:grid-cols-[2fr_1fr] pl-5">
           <p>Email: {paymentData.customer?.email}</p>
           <p>Phone: {paymentData.metadata?.phone}</p>
           <p>
@@ -107,9 +110,9 @@ export default function ConfirmationContent() {
   if (status === "failed") {
     return (
       <div>
-        <h1 style={{ color: "red" }}>Payment Failed ❌</h1>
-        <p>Unfortunately, your payment could not be processed.</p>
-        <p>Please try again or contact support.</p>
+        <h1 className="text-red-500 text-center">Payment Failed ❌</h1>
+        <p className="text-center">Unfortunately, your payment could not be processed.</p>
+        <p className="text-center">Please try again or contact support.</p>
       </div>
     );
   }
@@ -117,18 +120,17 @@ export default function ConfirmationContent() {
   if (status === "pending") {
     return (
       <div>
-        <h1 style={{ color: "orange" }}>Payment Pending ⏳</h1>
-        <p>Your payment is still being confirmed.</p>
-        <p>Please refresh this page in a few minutes.</p>
+        <h1 className="text-orange-400 text-center">Payment Pending ⏳</h1>
+        <p className="text-center">Your payment is still being confirmed.</p>
+        <p className="text-center"> Please refresh this page in a few minutes.</p>
       </div>
     );
   }
 
-  // Fallback if status is unknown
   return (
     <div>
-      <h1>Unknown Payment Status 🤔</h1>
-      <p>Please contact support with your reference: {reference}</p>
+      <h1 className="text-center">Unknown Payment Status 🤔</h1>
+      <p className="text-center">Please contact support with your reference: {reference}</p>
     </div>
   );
 }
