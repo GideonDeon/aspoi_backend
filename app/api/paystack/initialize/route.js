@@ -7,7 +7,7 @@ export async function POST(req) {
   try {
     // Parse FormData from the request
     const formData = await req.formData();
-    
+
     // Extract form fields
     const email = formData.get("email");
     const amount = formData.get("amount");
@@ -39,7 +39,7 @@ export async function POST(req) {
     const extension = path.extname(originalName);
     const baseName = path.basename(originalName, extension);
     const fileName = `${baseName}_${timestamp}${extension}`;
-    
+
     const filePath = path.join(uploadDir, fileName);
 
     // Write the file
@@ -64,13 +64,14 @@ export async function POST(req) {
       }
     );
 
-    return NextResponse.json(response.data, { status: 200,
+    return NextResponse.json(response.data, {
+      status: 200,
       headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    },
-  });
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    });
   } catch (error) {
     console.error("Error:", error.response?.data || error.message);
     return NextResponse.json(
