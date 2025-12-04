@@ -18,9 +18,9 @@ export default function RootLayout({ children }) {
             <Image
               src="/images/aspoi-logo.png"
               alt="ASPOI Logo"
-              width={80} // px
-              height={80} // px
-              className="rounded-full"
+              width={80}
+              height={80}
+              className="rounded-full relative left-[50%] -translate-[50%]"
             />
 
             <nav className="text-center mt-7 font-aldrich hover:text-[#feff00] w-fit relative left-[50%] -translate-x-[50%]">
