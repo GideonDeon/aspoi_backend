@@ -1,4 +1,5 @@
 import "./global.css";
+import Image from "next/image";
 
 export const metadata = {
   title: "Aspoi Membership",
@@ -14,11 +15,14 @@ export default function RootLayout({ children }) {
             <h1 className="text-center text-3xl mt-4 mb-2 font-roboto">
               ASPOI Membership
             </h1>
-            <img
+            <Image
               src="/images/aspoi-logo.png"
-              alt="logo"
-              className="w-20 h-20 relative left-[50%] -translate-x-[50%]"
+              alt="ASPOI Logo"
+              width={80} // px
+              height={80} // px
+              className="rounded-full"
             />
+
             <nav className="text-center mt-7 font-aldrich hover:text-[#feff00] w-fit relative left-[50%] -translate-x-[50%]">
               <a href="/">Home</a>
             </nav>
@@ -27,7 +31,7 @@ export default function RootLayout({ children }) {
 
         <main>{children}</main>
         <p className="text-center absolute -bottom-7 w-full">
-          ©  Aspoi {new Date().getFullYear()}
+          © Aspoi {new Date().getFullYear()}
         </p>
       </body>
     </html>
