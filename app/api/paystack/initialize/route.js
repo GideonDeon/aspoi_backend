@@ -3,6 +3,14 @@ import fs from "fs";
 import path from "path";
 import axios from "axios";
 
+// CRITICAL: Server-side pricing authority
+const MEMBERSHIP_PRICES = {
+  "Field Operational Membership": 1000,
+  "Philantropic Membership": 225000,
+  "Professional Membership Individual": 180000,
+  "Corporate Membership": 750000,
+};
+
 export async function POST(req) {
   try {
     // Parse FormData from the request
@@ -10,11 +18,29 @@ export async function POST(req) {
 
     // Extract form fields
     const email = formData.get("email");
-    const amount = formData.get("amount");
+    const clientAmount = formData.get("amount"); // Get client amount but don't trust it
     const fullname = formData.get("fullname");
     const phone = formData.get("phone");
     const membership = formData.get("membership");
     const imageFile = formData.get("image");
+
+    // SECURITY: Validate membership type exists
+    if (!MEMBERSHIP_PRICES[membership]) {
+      return NextResponse.json(
+        { error: "Invalid membership type" },
+        { status: 400 }
+      );
+    }
+
+    // SECURITY: Use server-side price, ignore client amount
+    const correctAmount = MEMBERSHIP_PRICES[membership];
+
+    // Optional: Log if client tried to send different amount
+    if (clientAmount && Number(clientAmount) !== correctAmount) {
+      console.warn(
+        `⚠️ Price mismatch detected for ${email}: client sent ${clientAmount}, correct is ${correctAmount}`
+      );
+    }
 
     if (!imageFile) {
       return NextResponse.json(
@@ -47,13 +73,19 @@ export async function POST(req) {
 
     const imageUrl = `/uploads/${fileName}`;
 
-    // Initialize Paystack transaction
+    // Initialize Paystack transaction with SERVER-VALIDATED amount
     const response = await axios.post(
       "https://api.paystack.co/transaction/initialize",
       {
         email,
-        amount: Number(amount) * 100, // Paystack expects kobo
-        metadata: { fullname, phone, membership, imageUrl },
+        amount: correctAmount * 100, // Use server price, not client price
+        metadata: {
+          fullname,
+          phone,
+          membership,
+          imageUrl,
+          validatedAmount: correctAmount, // Store for verification
+        },
         callback_url: `${process.env.BASE_URL}/confirmation`,
       },
       {
