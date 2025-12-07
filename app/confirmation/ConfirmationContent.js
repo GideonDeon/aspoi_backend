@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
+// import Image from "next/image";
 import jsPDF from "jspdf";
 
 export default function ConfirmationContent() {
@@ -76,7 +76,7 @@ export default function ConfirmationContent() {
           to have you with us!
         </h1>
         <div className="grid grid-cols-[1fr_2fr] mb-10 sm:pl-8 lg:pl-15">
-          <Image
+          <img
             src={paymentData.metadata?.imageUrl}
             alt="User uploaded"
             width={100}
