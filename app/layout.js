@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
               className="rounded-full relative left-[50%] -translate-[50%] mt-10"
             />
 
-            <nav className="text-center mt-2 font-aldrich hover:text-[#feff00] w-fit relative left-[50%] -translate-x-[50%]">
+            <nav className="text-center font-aldrich hover:text-[#feff00] w-fit relative left-[50%] -translate-x-[50%]">
               <a href="/">Home</a>
             </nav>
           </div>

@@ -27,7 +27,7 @@ export default function ConfirmationContent() {
   }, [reference]);
 
   if (error) return <p style={{ color: "red" }}>❌ {error}</p>;
-  if (!paymentData) return <p className="mt-5 ml-5 ">Verifying payment...</p>;
+  if (!paymentData) return <p className="mt-5 ml-5">Verifying payment...</p>;
 
   const status = paymentData.status;
 
@@ -75,13 +75,13 @@ export default function ConfirmationContent() {
           Thank you for completing your membership registration. We’re excited
           to have you with us!
         </h1>
-        <div className="grid grid-cols-[1fr_2fr] mb-10 sm:pl-8 lg:pl-15">
+        <div className="grid grid-cols-[1fr_2fr] pl-1 pr-1 mb-10 sm:pl-8 lg:pl-15">
           <Image
             src={paymentData.metadata?.imageUrl}
             alt="User uploaded"
             width={100}
             height={100}
-            className="w-30 h-30 border-2 border-black rounded-[15px]"
+            className="w-30 h-30 border-2 border-black rounded-[15px] ml-1 sm:ml-0"
           />
           <div className="pt-8 text-[15px]">
             <p className="mb-2">Fullname: {paymentData.metadata?.fullname}</p>
@@ -110,7 +110,7 @@ export default function ConfirmationContent() {
   if (status === "failed") {
     return (
       <div>
-        <h1 className="text-red-500 text-center">Payment Failed ❌</h1>
+        <h1 className="text-red-500 text-center mt-5 ml-5">Payment Failed ❌</h1>
         <p className="text-center">Unfortunately, your payment could not be processed.</p>
         <p className="text-center">Please try again or contact support.</p>
       </div>
@@ -120,7 +120,7 @@ export default function ConfirmationContent() {
   if (status === "pending") {
     return (
       <div>
-        <h1 className="text-orange-400 text-center">Payment Pending ⏳</h1>
+        <h1 className="text-orange-400 text-center mt-5 ml-5">Payment Pending ⏳</h1>
         <p className="text-center">Your payment is still being confirmed.</p>
         <p className="text-center"> Please refresh this page in a few minutes.</p>
       </div>

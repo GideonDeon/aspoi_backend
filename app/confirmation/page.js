@@ -5,7 +5,7 @@ import ConfirmationContent from "./ConfirmationContent"
 
 export default function ConfirmationPage() {
   return (
-    <Suspense fallback={<p>Loading confirmation...</p>}>
+    <Suspense fallback={<p className="mt-5 ml-5">Loading confirmation...</p>}>
       <ConfirmationContent />
     </Suspense>
   );
