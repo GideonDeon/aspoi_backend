@@ -1,9 +1,9 @@
 import axios from "axios"; 
 import prisma from "@/lib/prisma"; 
 
-// Same pricing constant for verification
+
 const MEMBERSHIP_PRICES = {
-  "Field Operational Membership": 1000,
+  "Field Operational Membership": 37500,
   "Philantropic Membership": 225000,
   "Professional Membership Individual": 180000,
   "Corporate Membership": 750000,
@@ -27,7 +27,6 @@ export async function GET(req) {
     const membership = paymentData.metadata?.membership;
     const paidAmount = paymentData.amount / 100;
 
-    // EXTRA SECURITY: Verify the paid amount matches expected price
     const expectedAmount = MEMBERSHIP_PRICES[membership];
     
     if (paidAmount !== expectedAmount) {
@@ -38,7 +37,6 @@ export async function GET(req) {
       );
     }
 
-    // Only save if payment is successful AND amount is correct
     if (paymentData.status === "success") {
       await prisma.user.upsert({ 
         where: { email: paymentData.customer.email }, 
@@ -65,7 +63,7 @@ export async function GET(req) {
     return new Response(JSON.stringify(response.data), { 
       status: 200, 
       headers: { 
-        "Access-Control-Allow-Origin": "https://aspoi.vercel.app", 
+        "Access-Control-Allow-Origin": "https://www.aspoi.com/", 
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS", 
         "Access-Control-Allow-Headers": "Content-Type, Authorization", 
       }, 
@@ -83,7 +81,7 @@ export async function OPTIONS() {
   return new Response(null, { 
     status: 204, 
     headers: { 
-      "Access-Control-Allow-Origin": "https://aspoi.vercel.app", 
+      "Access-Control-Allow-Origin": "https://www.aspoi.com/", 
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS", 
       "Access-Control-Allow-Headers": "Content-Type, Authorization", 
     }, 

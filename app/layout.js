@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
         <header className="bg-black text-white min-h-50">
           <div className="flex flex-col justify-center">
             <h1 className="text-center text-3xl mt-4 mb-2 font-roboto">
-              ASPOI <span className="text-[#feff00]">Membership</span>
+              ASPOI <span className="text-[#feff00]">Membership Receipt</span>
             </h1>
             <Image
               src="/images/aspoi-logo.png"
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
             />
 
             <nav className="text-center font-aldrich hover:text-[#feff00] w-fit relative left-[50%] -translate-x-[50%]">
-              <a href="/">Home</a>
+              <a href="https://www.aspoi.com/members">Home</a>
             </nav>
           </div>
         </header>

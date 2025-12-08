@@ -83,7 +83,7 @@ export default function ConfirmationContent() {
             height={100}
             className="w-30 h-30 border-2 border-black rounded-[15px] ml-1 sm:ml-0"
           />
-          <div className="pt-8 text-[15px]">
+          <div className="pt-6 text-[15px]">
             <p className="mb-2">Fullname: {paymentData.metadata?.fullname}</p>
             <p>Membership: {paymentData.metadata?.membership}</p>
           </div>
@@ -97,6 +97,7 @@ export default function ConfirmationContent() {
           <p>Amount Paid: ₦{paymentData.amount / 100}</p>
         </div>
         <p className="text-center text-[12px] italic mt-5">Please visit the members page for more details.</p>
+        <p><a href="https://www.aspoi.com/members" className="text-center mt-1">Check Membership</a></p>
         <button
           onClick={handleDownloadPDF}
           className="bg-black text-white hover:bg-[#feff00] hover:text-black uppercase cursor-pointer rounded-[10px] w-full h-10 transition-all delay-100 mt-12"
