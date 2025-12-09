@@ -3,6 +3,11 @@ import Image from "next/image";
 
 export const metadata = {
   title: "Aspoi Membership",
+  icons: {
+    icon: "/images/aspoi-logo.png",
+    shortcut: "/images/aspoi-logo.png",
+    apple: "/images/aspoi-logo.png",
+  },
   description: "Next.js + Prisma + Paystack integration",
 };
 
