@@ -97,7 +97,7 @@ export default function ConfirmationContent() {
           <p>Amount Paid: ₦{paymentData.amount / 100}</p>
         </div>
         <p className="text-center text-[12px] italic mt-5">Please visit the members page for more details.</p>
-        <p><a href="https://www.aspoi.com/members" className="text-center mt-1">Check Membership</a></p>
+        <p className="text-center mt-2"><a href="https://www.aspoi.com/members">Check Membership</a></p>
         <button
           onClick={handleDownloadPDF}
           className="bg-black text-white hover:bg-[#feff00] hover:text-black uppercase cursor-pointer rounded-[10px] w-full h-10 transition-all delay-100 mt-12"
