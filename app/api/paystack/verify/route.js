@@ -63,7 +63,7 @@ export async function GET(req) {
     return new Response(JSON.stringify(response.data), { 
       status: 200, 
       headers: { 
-        "Access-Control-Allow-Origin": "https://www.aspoi.com/", 
+        "Access-Control-Allow-Origin": "https://www.aspoi.com", 
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS", 
         "Access-Control-Allow-Headers": "Content-Type, Authorization", 
       }, 
@@ -81,7 +81,7 @@ export async function OPTIONS() {
   return new Response(null, { 
     status: 204, 
     headers: { 
-      "Access-Control-Allow-Origin": "https://www.aspoi.com/", 
+      "Access-Control-Allow-Origin": "https://www.aspoi.com", 
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS", 
       "Access-Control-Allow-Headers": "Content-Type, Authorization", 
     }, 
