@@ -18,6 +18,7 @@ model User {
   amount        Int
   paymentStatus String
   createdAt     DateTime @default(now())
-
+  paymentReference String? 
+  transactionId    String? 
   @@map("User") // <-- exact table name in Supabase
 }

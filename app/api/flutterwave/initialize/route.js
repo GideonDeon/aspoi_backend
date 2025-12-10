@@ -32,10 +32,8 @@ export async function POST(req) {
       );
     }
 
-
     const correctAmount = MEMBERSHIP_PRICES[membership];
 
-   
     if (clientAmount && Number(clientAmount) !== correctAmount) {
       console.warn(
         `⚠️ Price mismatch detected for ${email}: client sent ${clientAmount}, correct is ${correctAmount}`
@@ -52,7 +50,6 @@ export async function POST(req) {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-
     const timestamp = Date.now();
     const originalName = imageFile.name;
     const extension = originalName.split('.').pop();
@@ -64,7 +61,6 @@ export async function POST(req) {
     const date = new Date();
     const folderPath = `receipts/${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
     const filePath = `${folderPath}/${fileName}`;
-
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("membership-receipts")
@@ -82,49 +78,73 @@ export async function POST(req) {
       );
     }
 
-  
     const { data: publicUrlData } = supabase.storage
       .from("membership-receipts")
       .getPublicUrl(filePath);
 
     const imageUrl = publicUrlData.publicUrl;
 
-   
+    // Generate unique transaction reference
+    const tx_ref = `ASPOI-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    // Flutterwave payment initialization
     const response = await axios.post(
-      "https://api.paystack.co/transaction/initialize",
+      "https://api.flutterwave.com/v3/payments",
       {
-        email,
-        amount: correctAmount * 100,
-        metadata: {
-          fullname,
-          phone,
-          membership,
-          imageUrl,
-          validatedAmount: correctAmount,
-          storagePath: filePath, 
+        tx_ref: tx_ref,
+        amount: correctAmount,
+        currency: "NGN",
+        redirect_url: `${process.env.BASE_URL}/confirmation`,
+        payment_options: "card,banktransfer,ussd,account",
+        customer: {
+          email: email,
+          phonenumber: phone,
+          name: fullname,
         },
-        callback_url: `${process.env.BASE_URL}/confirmation`,
+        customizations: {
+          title: "ASPOI Membership Payment",
+          description: membership,
+          logo: "https://www.aspoi.com/logo.png", // Add your logo URL
+        },
+        meta: {
+          fullname: fullname,
+          phone: phone,
+          membership: membership,
+          imageUrl: imageUrl,
+          validatedAmount: correctAmount,
+          storagePath: filePath,
+        },
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
           "Content-Type": "application/json",
         },
       }
     );
 
-    return NextResponse.json(response.data, {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "https://www.aspoi.com",
-        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    return NextResponse.json(
+      {
+        status: "success",
+        message: "Payment link generated",
+        data: {
+          link: response.data.data.link,
+          tx_ref: tx_ref,
+        },
       },
-    });
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.aspoi.com",
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+      }
+    );
   } catch (error) {
     console.error("Error:", error.response?.data || error.message);
     return NextResponse.json(
-      { error: "Payment initialization failed" },
+      { error: "Payment initialization failed", details: error.response?.data },
       {
         status: 500,
         headers: {
