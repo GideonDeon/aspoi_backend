@@ -102,7 +102,7 @@ export async function POST(req) {
         customizations: {
           title: "ASPOI Membership Payment",
           description: membership,
-          logo: "https://www.aspoi.com/images/aspoi-logo",
+          logo: "https://www.aspoi.com/images/aspoi-logo.png",
         },
         meta: {
           fullname: fullname,
