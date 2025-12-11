@@ -10,13 +10,19 @@ export default function ConfirmationContent() {
   const transaction_id = searchParams.get("transaction_id");
   const tx_ref = searchParams.get("tx_ref");
   const status = searchParams.get("status");
-  
-  const [paymentData, setPaymentData] = useState(null);
+
+  const [paymentData, setPaymentData] = useState(
+    status === "cancelled" ? { status: "cancelled", tx_ref } : null
+  );
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (status === "cancelled") return;
+    
     if (transaction_id && tx_ref) {
-      fetch(`/api/flutterwave/verify?transaction_id=${transaction_id}&tx_ref=${tx_ref}&status=${status}`)
+      fetch(
+        `/api/flutterwave/verify?transaction_id=${transaction_id}&tx_ref=${tx_ref}&status=${status}`
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -52,12 +58,16 @@ export default function ConfirmationContent() {
 
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    
+
     doc.text(`Fullname: ${paymentData.customer?.name || "N/A"}`, 20, 50);
     doc.text(`Email: ${paymentData.customer?.email || "N/A"}`, 20, 60);
     doc.text(`Phone: ${paymentData.customer?.phonenumber || "N/A"}`, 20, 70);
     doc.text(`Membership: ${paymentData.meta?.membership || "N/A"}`, 20, 80);
-    doc.text(`Amount Paid: NGN${paymentData.amount?.toLocaleString() || "0"}`, 20, 90);
+    doc.text(
+      `Amount Paid: NGN${paymentData.amount?.toLocaleString() || "0"}`,
+      20,
+      90
+    );
     doc.text(`Payment Status: ${paymentData.status}`, 20, 100);
     doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 110);
     doc.text(`Reference: ${tx_ref}`, 20, 120);
@@ -71,8 +81,10 @@ export default function ConfirmationContent() {
 
   if (paymentStatus === "successful") {
     return (
-      <div className="pl-1 pr-1 h-fit w-full mb-10 shadow-2xl sm:w-120 
-                  sm:relative sm:left-[50%] sm:-translate-x-[50%] lg:w-140 font-roboto">
+      <div
+        className="pl-1 pr-1 h-fit w-full mb-10 shadow-2xl sm:w-120 
+                  sm:relative sm:left-[50%] sm:-translate-x-[50%] lg:w-140 font-roboto"
+      >
         <h1 className="italic text-center font-roboto mt-2 mb-3 pl-1 pr-1">
           Thank you for completing your membership registration. We are excited
           to have you with us!
@@ -92,14 +104,21 @@ export default function ConfirmationContent() {
         </div>
         <div className="grid grid-cols-[1fr_1fr] w-full text-[15px] gap-1 sm:grid-cols-[2fr_1fr] pl-5">
           <p>Email: {paymentData.customer?.email}</p>
-          <p>Phone: {paymentData.customer?.phonenumber || paymentData.meta?.phone}</p>
+          <p>
+            Phone:{" "}
+            {paymentData.customer?.phonenumber || paymentData.meta?.phone}
+          </p>
           <p>
             Payment Status: <span className="text-green-500">Successful!</span>
           </p>
           <p>Amount Paid: ₦{paymentData.amount?.toLocaleString()}</p>
         </div>
-        <p className="text-center text-[12px] italic mt-5">Please visit the members page for more details.</p>
-        <p className="text-center mt-2 text-blue-500"><a href="https://www.aspoi.com/members">Check Membership</a></p>
+        <p className="text-center text-[12px] italic mt-5">
+          Please visit the members page for more details.
+        </p>
+        <p className="text-center mt-2 text-blue-500">
+          <a href="https://www.aspoi.com/members">Check Membership</a>
+        </p>
         <button
           onClick={handleDownloadPDF}
           className="bg-black text-white hover:bg-[#feff00] hover:text-black uppercase cursor-pointer rounded-[10px] w-full h-10 transition-all delay-100 mt-12"
@@ -113,9 +132,11 @@ export default function ConfirmationContent() {
   if (paymentStatus === "cancelled") {
     return (
       <div>
-        <h1 className="text-gray-500 text-center mt-5 ml-5">Payment Cancelled 🚫</h1>
+        <h1 className="text-gray-500 text-center">Payment Cancelled 🚫</h1>
         <p className="text-center">You cancelled the payment process.</p>
-        <p className="text-center">No charges were made. If you wish, you can try again.</p>
+        <p className="text-center">
+          No charges were made. If you wish, you can try again.
+        </p>
         <p className="text-center mt-2 text-blue-500">
           <a href="https://www.aspoi.com/register">Retry Payment</a>
         </p>
@@ -126,8 +147,10 @@ export default function ConfirmationContent() {
   if (paymentStatus === "failed") {
     return (
       <div>
-        <h1 className="text-red-500 text-center mt-5 ml-5">Payment Failed ❌</h1>
-        <p className="text-center">Unfortunately, your payment could not be processed.</p>
+        <h1 className="text-red-500 text-center">Payment Failed ❌</h1>
+        <p className="text-center">
+          Unfortunately, your payment could not be processed.
+        </p>
         <p className="text-center">Please try again or contact support.</p>
       </div>
     );
@@ -136,9 +159,11 @@ export default function ConfirmationContent() {
   if (paymentStatus === "pending") {
     return (
       <div>
-        <h1 className="text-orange-400 text-center mt-5 ml-5">Payment Pending ⏳</h1>
+        <h1 className="text-orange-400 text-center">Payment Pending ⏳</h1>
         <p className="text-center">Your payment is still being confirmed.</p>
-        <p className="text-center">Please refresh this page in a few minutes.</p>
+        <p className="text-center">
+          Please refresh this page in a few minutes.
+        </p>
       </div>
     );
   }
@@ -146,7 +171,9 @@ export default function ConfirmationContent() {
   return (
     <div>
       <h1 className="text-center">Unknown Payment Status 🤔</h1>
-      <p className="text-center">Please contact support with your reference: {tx_ref}</p>
+      <p className="text-center">
+        Please contact support with your reference: {tx_ref}
+      </p>
     </div>
   );
 }

@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
             />
 
             <nav className="text-center font-aldrich hover:text-[#feff00] w-fit relative left-[50%] -translate-x-[50%]">
-              <a href="https://www.aspoi.com/members">Home</a>
+              <a href="https://www.aspoi.com">Home</a>
             </nav>
           </div>
         </header>
