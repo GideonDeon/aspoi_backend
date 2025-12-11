@@ -18,7 +18,7 @@ export default function ConfirmationContent() {
 
   useEffect(() => {
     if (status === "cancelled") return;
-    
+
     if (transaction_id && tx_ref) {
       fetch(
         `/api/flutterwave/verify?transaction_id=${transaction_id}&tx_ref=${tx_ref}&status=${status}`
@@ -132,7 +132,7 @@ export default function ConfirmationContent() {
   if (paymentStatus === "cancelled") {
     return (
       <div>
-        <h1 className="text-gray-500 text-center">Payment Cancelled 🚫</h1>
+        <h1 className="text-gray-500 text-center pt-10 text-[20px]">Payment Cancelled 🚫</h1>
         <p className="text-center">You cancelled the payment process.</p>
         <p className="text-center">
           No charges were made. If you wish, you can try again.
