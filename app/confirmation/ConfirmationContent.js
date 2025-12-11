@@ -110,6 +110,19 @@ export default function ConfirmationContent() {
     );
   }
 
+  if (paymentStatus === "cancelled") {
+    return (
+      <div>
+        <h1 className="text-gray-500 text-center mt-5 ml-5">Payment Cancelled 🚫</h1>
+        <p className="text-center">You cancelled the payment process.</p>
+        <p className="text-center">No charges were made. If you wish, you can try again.</p>
+        <p className="text-center mt-2 text-blue-500">
+          <a href="https://www.aspoi.com/register">Retry Payment</a>
+        </p>
+      </div>
+    );
+  }
+
   if (paymentStatus === "failed") {
     return (
       <div>
