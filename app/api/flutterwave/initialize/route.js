@@ -102,7 +102,7 @@ export async function POST(req) {
         customizations: {
           title: "ASPOI Membership Payment",
           description: membership,
-          logo: "http://localhost:5173/images/aspoi-logo",
+          logo: "https://www.aspoi.com/images/aspoi-logo",
         },
         meta: {
           fullname: fullname,
@@ -136,7 +136,7 @@ export async function POST(req) {
       {
         status: 200,
         headers: {
-          "Access-Control-Allow-Origin": "http://localhost:5173",
+          "Access-Control-Allow-Origin": "https://www.aspoi.com",
           "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
@@ -149,7 +149,7 @@ export async function POST(req) {
       {
         status: 500,
         headers: {
-          "Access-Control-Allow-Origin": "http://localhost:5173",
+          "Access-Control-Allow-Origin": "https://www.aspoi.com",
           "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
@@ -162,7 +162,7 @@ export async function OPTIONS() {
   return NextResponse.json(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Origin": "http://localhost:5173",
+      "Access-Control-Allow-Origin": "https://www.aspoi.com",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
