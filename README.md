@@ -54,3 +54,8 @@ http://localhost:3000
 
 
 You can explore API routes under app/api/….
+
+## License
+
+This project is licensed under the MIT License.
+
