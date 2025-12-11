@@ -57,7 +57,7 @@ export default function ConfirmationContent() {
     doc.text(`Email: ${paymentData.customer?.email || "N/A"}`, 20, 60);
     doc.text(`Phone: ${paymentData.customer?.phonenumber || "N/A"}`, 20, 70);
     doc.text(`Membership: ${paymentData.meta?.membership || "N/A"}`, 20, 80);
-    doc.text(`Amount Paid: ₦${paymentData.amount?.toLocaleString() || "0"}`, 20, 90);
+    doc.text(`Amount Paid: NGN${paymentData.amount?.toLocaleString() || "0"}`, 20, 90);
     doc.text(`Payment Status: ${paymentData.status}`, 20, 100);
     doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 110);
     doc.text(`Reference: ${tx_ref}`, 20, 120);
@@ -99,7 +99,7 @@ export default function ConfirmationContent() {
           <p>Amount Paid: ₦{paymentData.amount?.toLocaleString()}</p>
         </div>
         <p className="text-center text-[12px] italic mt-5">Please visit the members page for more details.</p>
-        <p className="text-center mt-2"><a href="https://www.aspoi.com/members">Check Membership</a></p>
+        <p className="text-center mt-2 text-blue-500"><a href="https://www.aspoi.com/members">Check Membership</a></p>
         <button
           onClick={handleDownloadPDF}
           className="bg-black text-white hover:bg-[#feff00] hover:text-black uppercase cursor-pointer rounded-[10px] w-full h-10 transition-all delay-100 mt-12"

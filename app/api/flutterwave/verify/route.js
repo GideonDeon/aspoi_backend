@@ -5,7 +5,7 @@ const MEMBERSHIP_PRICES = {
   "Field Operational Membership": 37500,
   "Philantropic Membership": 225000,
   "Professional Membership Individual": 180000,
-  "Corporate Membership": 75000,
+  "Corporate Membership": 750000,
 };
 
 export async function GET(req) {
@@ -15,7 +15,6 @@ export async function GET(req) {
   const status = searchParams.get("status");
 
   try {
-    // Verify the transaction with Flutterwave
     const response = await axios.get(
       `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`,
       {
@@ -27,12 +26,10 @@ export async function GET(req) {
 
     const paymentData = response.data.data;
     
-    // Extract metadata
     const membership = paymentData.meta?.membership;
     const paidAmount = paymentData.amount;
     const expectedAmount = MEMBERSHIP_PRICES[membership];
 
-    // Verify amount matches
     if (paidAmount !== expectedAmount) {
       console.error(
         `❌ Payment amount mismatch: expected ${expectedAmount}, got ${paidAmount}`
@@ -43,7 +40,6 @@ export async function GET(req) {
       );
     }
 
-    // Verify the transaction was successful and the reference matches
     if (
       paymentData.status === "successful" &&
       paymentData.tx_ref === tx_ref &&
@@ -52,8 +48,8 @@ export async function GET(req) {
       await prisma.user.create({
         data: {
           fullname: paymentData.meta?.fullname,
-          email: paymentData.customer.email,
-          phone: paymentData.meta?.phone || paymentData.customer.phone_number,
+          email: paymentData.meta?.email || paymentData.customer.email,
+          phone: paymentData.meta?.phone,
           membership: membership,
           amount: paidAmount,
           imageUrl: paymentData.meta?.imageUrl,
@@ -72,7 +68,12 @@ export async function GET(req) {
           status: paymentData.status,
           amount: paymentData.amount,
           currency: paymentData.currency,
-          customer: paymentData.customer,
+          customer: {
+            email: paymentData.meta?.email || paymentData.customer.email,
+            name: paymentData.meta?.fullname,
+            phonenumber: paymentData.meta?.phone,
+          },
+          meta: paymentData.meta,
           tx_ref: paymentData.tx_ref,
         },
       }),

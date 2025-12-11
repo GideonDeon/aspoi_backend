@@ -11,7 +11,7 @@ const MEMBERSHIP_PRICES = {
   "Field Operational Membership": 37500,
   "Philantropic Membership": 225000,
   "Professional Membership Individual": 180000,
-  "Corporate Membership": 75000,
+  "Corporate Membership": 750000,
 };
 
 export async function POST(req) {
@@ -84,10 +84,8 @@ export async function POST(req) {
 
     const imageUrl = publicUrlData.publicUrl;
 
-    // Generate unique transaction reference
     const tx_ref = `ASPOI-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-    // Flutterwave payment initialization
     const response = await axios.post(
       "https://api.flutterwave.com/v3/payments",
       {
@@ -104,10 +102,11 @@ export async function POST(req) {
         customizations: {
           title: "ASPOI Membership Payment",
           description: membership,
-          logo: "https://www.aspoi.com/logo.png", // Add your logo URL
+          logo: "http://localhost:5173/images/aspoi-logo",
         },
         meta: {
           fullname: fullname,
+          email: email,
           phone: phone,
           membership: membership,
           imageUrl: imageUrl,
@@ -123,6 +122,8 @@ export async function POST(req) {
       }
     );
 
+    console.log("Flutterwave Response:", JSON.stringify(response.data, null, 2));
+
     return NextResponse.json(
       {
         status: "success",
@@ -135,7 +136,7 @@ export async function POST(req) {
       {
         status: 200,
         headers: {
-          "Access-Control-Allow-Origin": "https://www.aspoi.com",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
           "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
@@ -148,7 +149,7 @@ export async function POST(req) {
       {
         status: 500,
         headers: {
-          "Access-Control-Allow-Origin": "https://www.aspoi.com",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
           "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
@@ -161,7 +162,7 @@ export async function OPTIONS() {
   return NextResponse.json(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Origin": "https://www.aspoi.com",
+      "Access-Control-Allow-Origin": "http://localhost:5173",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
