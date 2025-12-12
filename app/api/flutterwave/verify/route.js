@@ -5,7 +5,7 @@ const MEMBERSHIP_PRICES = {
   "Field Operational Membership": 37500,
   "Philantropic Membership": 225000,
   "Professional Membership Individual": 180000,
-  "Corporate Membership": 750000,
+  "Corporate Membership": 500000,
 };
 
 export async function GET(req) {
